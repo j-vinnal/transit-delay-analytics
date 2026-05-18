@@ -6,8 +6,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
-from data_pipeline import PROJECT_ROOT
-from data_pipeline.core.config import SourceConfig
+from transit_delay_analytics import PROJECT_ROOT
+from transit_delay_analytics.core.config import SourceConfig
 
 RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
 RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)

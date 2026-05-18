@@ -1,68 +1,24 @@
-# Data Pipeline Framework
+# Transit delay analytics
 
-## Description
+Configuration-driven data pipeline and stochastic modelling framework for analyzing public transport delays using GTFS and near real-time vehicle GPS data.
 
-A modular, configuration-driven, CLI-first python data pipeline designed for real-time and scheduled data ingestion. Built to fetch Tallinn public transport data (GPS & GTFS), it serves as a robust boilerplate for various data engineering projects. **Work is still in progress.**
-
-**Key Features:**
-
-- **Configuration-Driven:** Add or modify data sources via TOML.
-- **Idempotency & Partitioning:** Safely downloads data into Hive-style partitioned directories (e.g., `data/raw/source=gps/date=2026-05-12/`).
-- **Structured Logging:** Custom logging format designed for easy debugging and log parsing.
-
-## Getting Started (Local Development)
+## Getting Started
 
 ### Prerequisites
 
-- Python 3.11+
-
 ### Installation
 
-```bash
-# Create and activate a virtual environment
-python -m venv .venv
-.venv\Scripts\activate      # Windows
-source .venv/bin/activate   # Mac/Linux
+```sh
+# Install uv if you don't have it yet
+# https://docs.astral.sh/uv/getting-started/installation/
 
-# Install the package and its dependencies in editable mode
-pip install -e .
-
+# Install the project and all dependencies
+uv sync
 ```
 
-## Usage
+### Docker Deployment
 
-The pipeline is operated via a Command Line Interface (CLI). It features two main execution modes: `run` (one-off execution) and `daemon` (continuous background execution).
-
-### 1. One-off Execution (`run`)
-
-Fetch data immediately for the specified sources, completely ignoring the configured time windows.
-
-```bash
-# Run all configured sources at once
-python -m data_pipeline ingest
-
-# Run a specific source
-python -m data_pipeline ingest --source gps
-python -m data_pipeline ingest --source gtfs
-
-# Invalid sources will return a clear error:
-python -m data_pipeline ingest --source unknown
-# -> "invalid choice: 'unknown' (choose from 'gps', 'gtfs')"
-
-```
-
-### 2. Continuous Execution (`daemon`)
-
-Run the pipeline continuously. It will respect the `interval_seconds` and `window_start` / `window_end` settings defined in the configuration.
-
-```bash
-python -m data_pipeline daemon
-
-```
-
-## Docker Deployment
-
-For long-running ingestion, deploying with Docker Compose is highly recommended. The container mounts local `data`, `logs`, and `config` directories, meaning all downloaded files will appeare in Windows/host file system.
+For long-running ingestion, deploying with Docker Compose is recommended. The container mounts local `data`, `logs`, and `config` directories - all downloaded files will appeare in host file system.
 
 ```bash
 # Build the image and start the daemon in the background
@@ -76,58 +32,33 @@ docker-compose down
 
 ```
 
-## Configuration
+## Usage
 
-All data sources and schedules are managed in `config/pipeline.toml`.
+The pipeline is operated via a CLI with execution mode: `ingest` (one-off).
 
-```toml
-[sources.gps]
-url = "[https://transport.tallinn.ee/readfile.php?name=gps.txt](https://transport.tallinn.ee/readfile.php?name=gps.txt)"
-format = "csv"
-description = "Real-time vehicle positions, updated every 30 seconds"
-interval_seconds = 30
-window_start = "07:00"
-window_end = "10:00"
-overwrite_existing = true
+```sh
+# Run all configured sources at once
+uv run tra ingest
 
+# Run a specific source
+uv run tra ingest --source gps
+uv run tra ingest --source gtfs
 ```
 
-**Applying Configuration Changes:** Currently, the pipeline loads the configuration once at startup. If you modify `pipeline.toml` while the daemon is running via Docker, you need to restart the container for the changes to take effect:
+> Alternatively, activate the virtual environment first (`source .venv/bin/activate` on Mac/Linux or `.venv\Scripts\activate` on Windows) and omit the `uv run` prefix.
 
-```bash
-docker-compose restart
+## Repository Structure
 
-```
+## Execution Flow
 
-**TODO:**
+## Data Documentation
 
-- [ ] Implement hot-reloading for the daemon mode to re-read the configuration dynamically on every loop without requiring a restart.
-- [ ] Implement cron-style scheduling for data ingestion
+## Methodology & Thought Process
 
-## Development dependencies
+## Dependencies & Tech Stack
 
-For local development and testing we include a `dev-requirements.txt` with linters, type checkers and test tools. Install them into your virtual environment:
+## Limitations & Future Work
 
-Windows:
+## License
 
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r dev-requirements.txt
-```
-
-macOS / Linux:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r dev-requirements.txt
-```
-
-Alternative: if you prefer a single-file config, you can add dev extras to `pyproject.toml` under `project.optional-dependencies.dev` and install with:
-
-```bash
-pip install .[dev]
-```
-
-The `dev-requirements.txt` is committed to the repository for quick setup; use whichever workflow fits your tooling.
+This project is licensed under the MIT License.

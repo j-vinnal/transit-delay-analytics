@@ -1,6 +1,6 @@
 """Central project constants."""
 
-from data_pipeline import PROJECT_ROOT
+from transit_delay_analytics import PROJECT_ROOT
 
 
 # Default configuration paths

@@ -5,7 +5,7 @@ disable_existing_loggers = false
 
 [formatters.conditional_formatter]
 # The "()" key tells dictConfig to instantiate a custom class.
-"()" = "data_pipeline.core.logger.ConditionalFormatter"
+"()" = "transit_delay_analytics.core.logger.ConditionalFormatter"
 fmt = "{asctime}.{msecs:03.0f} | {levelname:<8} | {name:<14} | {funcName:<12}:{lineno} | {message:<20}"
 style = "{"
 datefmt = "%Y-%m-%d %H:%M:%S"

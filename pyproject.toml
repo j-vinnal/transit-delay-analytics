@@ -1,45 +1,16 @@
-[build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
 [project]
-name = "data-pipeline"
+name = "transit-delay-analytics"
 version = "0.1.0"
-description = "A modular data pipeline framework."
-authors = [
-    {name = "Jüri Vinnal"}
-]
+description = "Configuration-driven data pipeline and stochastic modelling framework for analyzing public transport delays using GTFS and near real-time vehicle GPS data."
 readme = "README.md"
-license = {text = "MIT"}
+authors = [{ name = "Jüri Vinnal", email = "juvinn@taltech.ee" }]
 requires-python = ">=3.11"
-dependencies = [
-    "requests>=2.31.0"
-]
+dependencies = ["requests>=2.31.0"] # "httpx>=0.24.0"
 
 [project.scripts]
-data-pipeline = "data_pipeline.__main__:main"
+transit-delay-analytics = "transit_delay_analytics.__main__:main"
+tra = "transit_delay_analytics.__main__:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.ruff]
-line-length = 88
-target-version = "py311"
-src = ["src", "tests"]
-
-[tool.ruff.lint]
-ignore = []
-
-[tool.mypy]
-strict = true
-warn_return_any = true
-warn_unused_ignores = true
-show_error_codes = true
-ignore_missing_imports = true
-
-[tool.pytest.ini_options]
-minversion = "7.0"
-addopts = "-svv --cov=src --cov-report=term-missing"
-testpaths = [
-    "tests",
-]
+[build-system]
+requires = ["uv_build>=0.11.14,<0.12.0"]
+build-backend = "uv_build"

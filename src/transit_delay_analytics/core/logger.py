@@ -7,8 +7,8 @@ import tomllib
 from pathlib import Path
 from typing import Any, Literal
 
-from data_pipeline import PROJECT_ROOT
-from data_pipeline.constants import DEFAULT_LOG_CONFIG, LOGS_DIR
+from transit_delay_analytics import PROJECT_ROOT
+from transit_delay_analytics.constants import DEFAULT_LOG_CONFIG, LOGS_DIR
 
 
 class ConditionalFormatter(logging.Formatter):

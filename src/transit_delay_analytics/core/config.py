@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
-from data_pipeline.constants import DEFAULT_PIPELINE_CONFIG
+from transit_delay_analytics.constants import DEFAULT_PIPELINE_CONFIG
 
 
 @dataclass(frozen=True)

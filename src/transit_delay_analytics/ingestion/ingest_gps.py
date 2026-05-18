@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests
 
-from data_pipeline.ingestion.base import BaseIngestor
+from transit_delay_analytics.ingestion.base import BaseIngestor
 
 
 class GPSIngestor(BaseIngestor, source_name="gps"):

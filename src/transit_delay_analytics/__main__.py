@@ -8,14 +8,14 @@ import tomllib
 from datetime import datetime, timezone
 from pathlib import Path
 
-from data_pipeline import ingestion
-from data_pipeline.cli import parse_args
-from data_pipeline.core.config import (
+from transit_delay_analytics import ingestion
+from transit_delay_analytics.cli import parse_args
+from transit_delay_analytics.core.config import (
     SourceConfig,
     is_now_within_window,
     load_pipeline_config,
 )
-from data_pipeline.core.logger import setup_logging
+from transit_delay_analytics.core.logger import setup_logging
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 services:
   pipeline:
     build: .
-    container_name: rmk_data_pipeline
+    container_name: transit_delay_analytics
     # Ensures that when the computer is restarted, the script will run again
     restart: unless-stopped 
     environment:
