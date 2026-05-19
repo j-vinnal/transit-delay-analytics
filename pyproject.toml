@@ -5,7 +5,12 @@ description = "Configuration-driven data pipeline and stochastic modelling frame
 readme = "README.md"
 authors = [{ name = "Jüri Vinnal", email = "juvinn@taltech.ee" }]
 requires-python = ">=3.12"
-dependencies = ["requests>=2.31.0"] # "httpx>=0.24.0"
+license = "MIT"
+
+dependencies = [
+    "polars>=1.40.1",
+    "requests>=2.34.2",
+] # "httpx>=0.24.0"
 
 [project.scripts]
 transit-delay-analytics = "transit_delay_analytics.__main__:main"
