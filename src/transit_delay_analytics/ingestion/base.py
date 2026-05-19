@@ -2,9 +2,11 @@
 
 from datetime import datetime, timezone
 import logging
-from abc import ABC, abstractmethod
+from abc import ABC
 from pathlib import Path
 from typing import Any
+
+import requests
 
 from transit_delay_analytics import PROJECT_ROOT
 from transit_delay_analytics.core.config import SourceConfig
@@ -39,41 +41,40 @@ class BaseIngestor(ABC):
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def get_save_dir(self) -> Path:
-        """Generates a Hive-style partitioned directory for the current UTC date.
+        """Returns the Hive-style partitioned directory for the current UTC date.
 
         The `date=` partition is derived from UTC to avoid DST/timezone issues.
+        Does not create the directory (no side effects).
         """
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        # Create directory: data/raw/source=gps/date=2026-05-12/
-        dir_path = (
+        return (
             PROJECT_ROOT
             / "data"
             / "raw"
             / f"source={self.config.name}"
             / f"date={today}"
         )
-        dir_path.mkdir(parents=True, exist_ok=True)
-        return dir_path
 
-    @abstractmethod
     def fetch(self) -> bytes:
-        pass
+        """Fetch raw data via HTTP GET using the configured timeout."""
+        response = requests.get(self.config.url, timeout=self.config.timeout_seconds)
+        response.raise_for_status()
+        return response.content
 
-    def save(self, data: bytes) -> Path:
-        """Default save implementation writing raw bytes to the target path.
+    def get_target_path(self) -> Path:
+        """Determines the target path using a UTC timestamp filename."""
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        filename = f"{self.config.name}_{timestamp}.{self.config.format}"
+        return self.get_save_dir() / filename
+
+    def save(self, data: bytes, path: Path) -> Path:
+        """Write raw bytes to the given path, creating parent directories as needed.
 
         Subclasses may override if special handling is required.
         """
-        target = self.get_target_path()
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with target.open("wb") as f:
-            f.write(data)
-        return target
-
-    @abstractmethod
-    def get_target_path(self) -> Path:
-        """Determines the target path for the data without saving it yet."""
-        pass
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+        return path
 
     def run(self) -> None:
         """Orchestrate the ingestion process with idempotency check."""
@@ -92,7 +93,7 @@ class BaseIngestor(ABC):
         self.logger.info("Ingestion started", extra={"url": self.config.url})
         try:
             raw_data = self.fetch()
-            saved_path = self.save(raw_data)
+            saved_path = self.save(raw_data, target_path)
 
             size_mb = round(len(raw_data) / (1024 * 1024), 2)
             self.logger.info(

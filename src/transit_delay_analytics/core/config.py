@@ -29,6 +29,7 @@ class SourceConfig:
     format: str
     description: str
     interval_seconds: int = 0
+    timeout_seconds: int = 30
     window_start: str | None = None
     window_end: str | None = None
     timezone: str | None = None

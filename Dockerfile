@@ -1,28 +1,51 @@
-# Use the official lightweight Python 3.11 base image
-FROM python:3.11-slim
+# Dockerfile uv example: https://github.com/astral-sh/uv-docker-example/blob/main/Dockerfile
 
-# Install uv from the official image
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# Use a Python image with uv pre-installed
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-# Set the working directory inside the container
+# Setup a non-root user
+# RUN groupadd --system --gid 999 nonroot \
+#  && useradd --system --gid 999 --uid 999 --create-home nonroot
+
+# Install the project into `/app`
 WORKDIR /app
 
-# Copy the project configuration, lockfile, and source code
-COPY pyproject.toml uv.lock ./
-COPY src/ src/
-COPY config/ config/
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
 
-# Install the project and dependencies using uv
-RUN uv sync --frozen
+# Copy from the cache instead of linking since it's a mounted volume
+ENV UV_LINK_MODE=copy
 
-# Create empty data and logs directories to mount local volumes later
-RUN mkdir -p data logs
+# Omit development dependencies
+ENV UV_NO_DEV=1
 
-# Set the timezone to UTC for consistent system time inside the container
+# Ensure installed tools can be executed out of the box
+ENV UV_TOOL_BIN_DIR=/usr/local/bin
+
+# Install the project's dependencies using the lockfile and settings
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project
+
+# Then, add the rest of the project source code and install it
+# Installing separately from its dependencies allows optimal layer caching
+COPY . /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
+# UTC time
 ENV TZ="UTC"
 
-# Tell Python where the source directory is
-ENV PYTHONPATH="/app/src"
+# Reset the entrypoint, don't invoke `uv`
+ENTRYPOINT []
 
-# Run the daemon process using the correct module name via uv run
-CMD ["uv", "run", "transit_delay_analytics", "daemon"]
+# Use the non-root user to run our application
+# USER nonroot
+
+# RUN mkdir -p data logs
+
+CMD ["uv", "run", "tra", "daemon"]

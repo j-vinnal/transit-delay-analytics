@@ -5,6 +5,7 @@ url = "https://transport.tallinn.ee/readfile.php?name=gps.txt"
 format = "csv"
 description = "Real-time vehicle positions, updated every 30 seconds"
 interval_seconds = 30
+timeout_seconds = 10
 window_start = "07:00"
 window_end = "10:00"
 timezone = "Europe/Tallinn"
@@ -15,6 +16,7 @@ url = "https://transport.tallinn.ee/data/gtfs.zip"
 format = "zip"
 description = "GTFS schedule and stop data, updated daily at 04:00"
 interval_seconds = 86400                                            # 24 h
+timeout_seconds = 30
 window_start = "04:00"
 window_end = "05:00"
 timezone = "Europe/Tallinn"

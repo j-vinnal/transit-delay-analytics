@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Configuration-driven data pipeline and stochastic modelling framework for analyzing public transport delays using GTFS and near real-time vehicle GPS data."
 readme = "README.md"
 authors = [{ name = "Jüri Vinnal", email = "juvinn@taltech.ee" }]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = ["requests>=2.31.0"] # "httpx>=0.24.0"
 
 [project.scripts]
