@@ -223,6 +223,20 @@ __marimo__/
 data/
 !data/.gitkeep
 
+
+
+!data/raw/source=gps.gitkeep
+!data/raw/source=gtfs.gitkeep
+
+!data/standardized.gitkeep
+!data/intermediate.gitkeep
+!data/curated.gitkeep
+
+!data/analytics.gitkeep
+
+
+
+
 # logs
 logs/
 !logs/.gitkeep
