@@ -225,14 +225,14 @@ data/
 
 
 
-!data/raw/source=gps.gitkeep
-!data/raw/source=gtfs.gitkeep
+!data/raw/source=gps/.gitkeep
+!data/raw/source=gtfs/.gitkeep
 
-!data/standardized.gitkeep
-!data/intermediate.gitkeep
-!data/curated.gitkeep
+!data/standardized/.gitkeep
+!data/intermediate/.gitkeep
+!data/curated/.gitkeep
 
-!data/analytics.gitkeep
+!data/analytics/.gitkeep
 
 
 
