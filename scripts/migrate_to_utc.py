@@ -20,10 +20,9 @@ from __future__ import annotations
 
 import argparse
 import re
+from collections.abc import Iterable
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Iterable
-
 
 TIMESTAMP_RE = re.compile(r"_(\d{8}_\d{6})")
 

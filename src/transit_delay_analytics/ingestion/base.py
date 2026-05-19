@@ -1,8 +1,8 @@
 """Abstract base class for data ingestors."""
 
-from datetime import datetime, timezone
 import logging
 from abc import ABC
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -46,7 +46,7 @@ class BaseIngestor(ABC):
         The `date=` partition is derived from UTC to avoid DST/timezone issues.
         Does not create the directory (no side effects).
         """
-        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
         return (
             PROJECT_ROOT
             / "data"
@@ -63,7 +63,7 @@ class BaseIngestor(ABC):
 
     def get_target_path(self) -> Path:
         """Determines the target path using a UTC timestamp filename."""
-        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
         filename = f"{self.config.name}_{timestamp}.{self.config.format}"
         return self.get_save_dir() / filename
 

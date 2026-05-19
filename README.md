@@ -34,10 +34,16 @@ docker-compose down
 
 ## Usage
 
-The pipeline is operated via a CLI with execution mode: `ingest` (one-off).
+The pipeline exposes three CLI commands: `ingest`, `daemon`, and `transform`.
+
+> Alternatively to `uv run`, activate the virtual environment first (`source .venv/bin/activate` on Mac/Linux or `.venv\Scripts\activate` on Windows) and omit the `uv run` prefix.
+
+### `ingest` — one-off data collection
+
+Downloads the latest raw data from configured sources and saves it to `data/raw/`.
 
 ```sh
-# Run all configured sources at once
+# Run all configured sources
 uv run tra ingest
 
 # Run a specific source
@@ -45,7 +51,60 @@ uv run tra ingest --source gps
 uv run tra ingest --source gtfs
 ```
 
-> Alternatively, activate the virtual environment first (`source .venv/bin/activate` on Mac/Linux or `.venv\Scripts\activate` on Windows) and omit the `uv run` prefix.
+### `daemon` — continuous scheduled collection
+
+Runs ingestors continuously on the schedules defined in `config/pipeline.toml`
+(GPS every 30 s within a time window, GTFS once a day).
+
+```sh
+# Start daemon for all sources (also the default in Docker)
+uv run tra daemon
+
+# Daemon for a specific source
+uv run tra daemon --source gps
+```
+
+### `transform` — standardize raw data
+
+Reads raw files from `data/raw/`, parses and type-casts them, and writes
+clean Parquet partitions to `data/standardized/`.
+
+Each model produces one partition per date (`date=YYYY-MM-DD/part.parquet`).
+Re-running is safe — existing partitions are skipped unless `--overwrite` is passed.
+
+```sh
+# Standardize today's GPS data
+uv run tra transform --model gps_positions
+
+# Standardize a specific date
+uv run tra transform --model gps_positions --date 2026-05-19
+
+# Backfill all available dates
+uv run tra transform --model gps_positions --all-dates
+
+# Backfill a date range
+uv run tra transform --model gps_positions --date-from 2026-05-12 --date-to 2026-05-19
+
+# Run all models for today
+uv run tra transform
+
+# Force overwrite existing partitions
+uv run tra transform --model gtfs_stops --all-dates --overwrite
+```
+
+Available models: `gps_positions`, `gtfs_stops`, `gtfs_routes`, `gtfs_trips`, `gtfs_stop_times`
+
+## Development Utilities
+
+### `scripts/verify_standardized.py`
+
+Validates the output of the standardized layer — checks schemas, coordinate
+bounds, and partition counts across all five models. Run after a backfill
+or when adding a new transformer.
+
+```sh
+uv run python scripts/verify_standardized.py
+```
 
 ## Repository Structure
 

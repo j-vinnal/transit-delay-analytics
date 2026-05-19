@@ -55,7 +55,8 @@ class ConditionalFormatter(logging.Formatter):
         original_exc_info = record.exc_info
         original_exc_text = record.exc_text
 
-        # Temporarily clear the exception info to prevent automatic multi-line traceback printing
+        # Temporarily clear the exception info to prevent automatic
+        # multi-line traceback printing
         record.exc_info = None
         record.exc_text = None
 
@@ -99,7 +100,9 @@ def _resolve_log_file_paths(config: dict[str, Any], base_dir: Path) -> None:
                 handler_cfg["filename"] = str(base_dir / filename)
 
 
-def setup_logging(config_path: Path = DEFAULT_LOG_CONFIG, log_dir: Path = LOGS_DIR) -> None:
+def setup_logging(
+    config_path: Path = DEFAULT_LOG_CONFIG, log_dir: Path = LOGS_DIR
+) -> None:
     """Load logging configuration from a TOML file and apply it.
 
     Args:

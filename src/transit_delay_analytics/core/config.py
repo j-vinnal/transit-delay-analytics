@@ -5,7 +5,7 @@ Includes helpers to interpret local-time windows and convert them to UTC.
 
 import tomllib
 from dataclasses import dataclass
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -44,7 +44,8 @@ def load_pipeline_config(
     Args:
         config_path (Path): Path to the pipeline TOML configuration file.
     Returns:
-        dict[str, SourceConfig]: A dictionary mapping source names to their configurations.
+        dict[str, SourceConfig]: A dictionary mapping source names to their
+            configurations.
     Raises:
         FileNotFoundError: If the configuration file does not exist.
     """
@@ -97,5 +98,5 @@ def is_now_within_window(source: SourceConfig, now_utc: datetime | None = None) 
     start_utc = start_local.astimezone(ZoneInfo("UTC"))
     end_utc = end_local.astimezone(ZoneInfo("UTC"))
 
-    now_utc = now_utc or datetime.now(timezone.utc)
+    now_utc = now_utc or datetime.now(UTC)
     return start_utc <= now_utc <= end_utc
