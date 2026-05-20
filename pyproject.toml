@@ -23,6 +23,8 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "duckdb>=1.5.2",
+    "pyarrow>=24.0.0",
     "ruff>=0.15.13",
 ]
 
