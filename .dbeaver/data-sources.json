@@ -1,0 +1,49 @@
+{
+	"folders": {},
+	"connections": {
+		"duckdb_jdbc-19e747301d5-13b1f342bbdedcc1": {
+			"provider": "duckdb",
+			"driver": "duckdb_jdbc",
+			"name": "db.duckdb",
+			"save-password": true,
+			"configuration": {
+				"database": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics\\db.duckdb",
+				"url": "jdbc:duckdb:C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics\\db.duckdb",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"file_search_path": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics"
+				},
+				"bootstrap": {
+					"query": ["set file_search_path \u003d C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics"]
+				}
+			},
+			"custom-properties": {
+				"SQLEditor.Highlighting.advanced.enable": "false"
+			},
+			"extensions": {
+				"ai.assistant": {
+					"confirmed": true,
+					"mcpEnabled": false
+				}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

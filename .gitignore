@@ -248,3 +248,9 @@ logs/
 create_context.py
 context.txt
 docs/
+.sqlfluff
+.settings/
+.sandbox/
+data/
+
+

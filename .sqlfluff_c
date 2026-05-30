@@ -1,0 +1,252 @@
+# ==============================================================================
+# CORE
+# Global sqlfluff behaviour and parser settings.
+# ==============================================================================
+
+[sqlfluff]
+dialect = duckdb
+templater = raw
+max_line_length = 120
+
+# Ignore parsing errors — SET VARIABLE string concat is not supported by the
+# sqlfluff DuckDB parser. Suppresses PRS errors globally.
+ignore = parsing
+
+
+# ==============================================================================
+# INDENTATION
+# Controls how clauses and blocks are indented.
+# ==============================================================================
+
+[sqlfluff:indentation]
+tab_space_size = 4
+indented_joins = False        # JOIN is not indented relative to FROM
+indented_ctes = True          # CTE body is indented inside WITH block
+indented_using_on = True      # ON/USING condition is indented under JOIN
+template_blocks_ident = True  # Jinja/template blocks are indented
+
+
+# ==============================================================================
+# COMMAS & SPACING
+# Controls comma placement and whitespace.
+# ==============================================================================
+
+# Commas are leading (start of line), aligned with the column that follows.
+# e.g.   col_a
+#      , col_b
+[sqlfluff:layout:type:comma]
+spacing_before = touch
+line_position = leading:align-following
+
+# No trailing whitespace at end of lines. No double spaces between tokens.
+[sqlfluff:rules:layout.spacing]
+no_trailing_whitespace = true
+extra_whitespace = false
+
+
+# ==============================================================================
+# CAPITALISATION
+# Enforces consistent casing for different token types.
+# ==============================================================================
+
+# SQL keywords must be UPPER case — SELECT, FROM, WHERE, JOIN etc.
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
+# Data types must be UPPER case — VARCHAR, INTEGER, DATE etc.
+[sqlfluff:rules:capitalisation.types]
+extended_capitalisation_policy = upper
+
+# Built-in functions must be lower case — coalesce(), nullif(), count() etc.
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+unquoted_identifiers_policy = all
+
+# String/boolean literals must be lower case — true, false, null
+[sqlfluff:rules:capitalisation.literals]
+capitalisation_policy = lower
+
+
+# ==============================================================================
+# CLAUSE LAYOUT
+# Controls whether clauses start on a new line and keyword positioning.
+# ==============================================================================
+
+# WHERE col = 1
+#   AND col2 = 2   ← AND/OR are leading on their own line
+[sqlfluff:layout:type:where_clause]
+line_position = alone:strict
+keyword_line_position = leading:strict
+
+# ORDER BY starts on its own line; commas are leading
+[sqlfluff:layout:type:orderby_clause]
+line_position = alone:strict
+keyword_line_position = leading:strict
+
+# PARTITION BY starts on its own line inside window functions
+[sqlfluff:layout:type:partitionby_clause]
+line_position = alone:strict
+keyword_line_position = leading:strict
+
+# QUALIFY clause starts on its own line (DuckDB window filter)
+[sqlfluff:layout:type:qualify_clause]
+line_position = alone:strict
+keyword_line_position = leading:strict
+
+# OVER(...) stays on the same line as the window function (trailing)
+[sqlfluff:layout:type:over_clause]
+line_position = trailing:strict
+keyword_line_position = trailing:strict
+
+# General keyword newline rule (fallback for unlisted clause types)
+[sqlfluff:layout.keyword_newline]
+line_position = alone:strict
+keyword_line_position = leading:strict
+
+# CTE spacing — single space within the CTE expression block
+[sqlfluff:layout:type:common_table_expression]
+spacing_within = single
+
+
+# ==============================================================================
+# NEWLINES
+# Controls blank lines between and inside statements.
+# ==============================================================================
+
+[sqlfluff:rules:layout.newlines]
+maximum_empty_lines_between_statements = 1  # Max 1 blank line between queries
+maximum_empty_lines_inside_statements = 0   # No blank lines inside a query
+maximum_empty_lines_between_batches = 1     # Max 1 blank line between batches
+
+# Files must not begin with blank lines or whitespace (auto-fixable)
+[sqlfluff:rules:layout.start_of_file]
+
+# SELECT DISTINCT must be on the same line as SELECT (auto-fixable)
+[sqlfluff:rules:layout.select_modifiers]
+
+# Blank line required after each CTE definition (auto-fixable)
+[sqlfluff:rules:layout.cte_newline]
+
+# CTE AS keyword bracket placement (auto-fixable)
+[sqlfluff:rules:layout.cte_bracket]
+
+# No extra spaces around function call parentheses (auto-fixable)
+[sqlfluff:rules:layout.functions]
+
+# SELECT target layout:
+#   single_target_policy = same_line: if only one column, keep on same line as SELECT
+#   wildcard_policy = single: SELECT * must be alone, not SELECT *, col
+[sqlfluff:rules:layout.select_targets]
+single_target_policy = same_line
+wildcard_policy = single
+
+
+# ==============================================================================
+# CONVENTIONS
+# Enforces consistent SQL style choices.
+# ==============================================================================
+
+# Use != instead of <> for not-equal comparisons
+[sqlfluff:rules:convention.not_equal]
+preferred_not_equal_style = c_style
+
+# Use :: shorthand casting instead of CAST() — e.g. col::DATE not CAST(col AS DATE)
+[sqlfluff:rules:convention.casting_style]
+preferred_type_casting_style = shorthand
+
+# Use COALESCE() instead of IFNULL() or NVL() (auto-fixable)
+[sqlfluff:rules:convention.coalesce]
+
+# No trailing comma on last SELECT column (auto-fixable)
+[sqlfluff:rules:convention.select_trailing_comma]
+select_clause_trailing_comma = forbid
+
+# Semicolon at end of file is optional (not required)
+[sqlfluff:rules:convention.terminator]
+require_final_semicolon = False
+
+# Top-level statements should not be wrapped in brackets (auto-fixable)
+[sqlfluff:rules:convention.statement_brackets]
+
+
+# ==============================================================================
+# STRUCTURE
+# Enforces query structure best practices.
+# ==============================================================================
+
+# CASE WHEN x IS NULL THEN y END → should be rewritten as COALESCE(x, y) (auto-fixable)
+[sqlfluff:rules:structure.simple_case]
+
+# Nested CASE in ELSE clause should be flattened to WHEN/THEN (auto-fixable)
+[sqlfluff:rules:structure.nested_case]
+
+# Subqueries in FROM/JOIN are forbidden — use CTEs instead
+[sqlfluff:rules:structure.subquery]
+forbid_subquery_in = both
+
+
+# ==============================================================================
+# AMBIGUITY
+# Flags patterns that are technically valid but unclear or error-prone.
+# ==============================================================================
+
+# SELECT * is not allowed — always name your columns explicitly
+[sqlfluff:rules:ambiguous.column_count]
+
+# DISTINCT and GROUP BY together is ambiguous — use one or the other
+[sqlfluff:rules:ambiguous.distinct]
+
+# JOIN type must always be explicit — INNER JOIN, LEFT JOIN etc. (not just JOIN)
+[sqlfluff:rules:ambiguous.join]
+fully_qualify_join_types = inner
+
+# GROUP BY / ORDER BY can reference column position implicitly (e.g. ORDER BY 1)
+[sqlfluff:rules:ambiguous.column_references]
+group_by_and_order_by_style = implicit
+
+
+# ==============================================================================
+# REFERENCES & ALIASING
+# Enforces consistent table/column references and alias usage.
+# ==============================================================================
+
+# Table aliases must be unique within a query
+[sqlfluff:rules:aliasing.unique.table]
+
+# Tables that are aliased must actually use that alias somewhere
+[sqlfluff:rules:aliasing.unused]
+
+# All column references must be resolvable to a table in the FROM clause
+[sqlfluff:rules:references.from]
+
+# If multiple tables are in scope, column references must be qualified (table.col)
+[sqlfluff:rules:references.qualification]
+
+# Identifiers and keywords should not be unnecessarily quoted
+[sqlfluff:rules:references.quoting]
+prefer_quoted_identifiers = False
+prefer_quoted_keywords = False
+ignore_words = None
+ignore_words_regex = None
+
+# Columns that shadow reserved keywords must be quoted (flags potential issues)
+[sqlfluff:rules:references.keywords]
+
+
+# ==============================================================================
+# DISABLED / COMMENTED OUT RULES
+# Rules that are available but intentionally not enforced.
+# ==============================================================================
+
+# Enforce consistent single/multi table reference style
+# (unqual = never qualify when only one table in scope)
+#[sqlfluff:rules:references.consistent]
+#single_table_references = unqual
+
+# Require explicit AS keyword for table aliases
+#[sqlfluff:rules:aliasing.table]
+#aliasing = explicit
+
+# Require explicit AS keyword for column aliases
+#[sqlfluff:rules:aliasing.column]
+#aliasing = explicit
