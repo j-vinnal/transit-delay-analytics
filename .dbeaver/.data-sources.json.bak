@@ -1,32 +1,23 @@
 {
 	"folders": {},
 	"connections": {
-		"duckdb_jdbc-19e747301d5-13b1f342bbdedcc1": {
+		"duckdb_jdbc-19ebd14e114-47929e03eaed3c1e": {
 			"provider": "duckdb",
 			"driver": "duckdb_jdbc",
 			"name": "db.duckdb",
 			"save-password": true,
 			"configuration": {
-				"database": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics\\db.duckdb",
-				"url": "jdbc:duckdb:C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics\\db.duckdb",
+				"database": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit-delay-analytics\\db.duckdb",
+				"url": "jdbc:duckdb:C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit-delay-analytics\\db.duckdb",
 				"configurationType": "MANUAL",
 				"type": "dev",
 				"closeIdleConnection": true,
 				"properties": {
-					"file_search_path": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics"
-				},
-				"bootstrap": {
-					"query": ["set file_search_path \u003d C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit_delay_analytics"]
+					"file_search_path": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit-delay-analytics"
 				}
 			},
 			"custom-properties": {
-				"SQLEditor.Highlighting.advanced.enable": "false"
-			},
-			"extensions": {
-				"ai.assistant": {
-					"confirmed": true,
-					"mcpEnabled": false
-				}
+				"resultset.maxrows": "2000"
 			}
 		}
 	},
