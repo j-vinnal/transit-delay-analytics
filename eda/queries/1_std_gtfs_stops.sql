@@ -1,9 +1,11 @@
 -- ===============================================================================================
 -- Raw GTFS data standardization: RAW -> STANDARDIZED
+-- standardized.gtfs_stops
+-- Business question answered: "Where exactly is each stop?"
 -- Standardizes, parses, and loads raw GTFS CSV files into a single table for a selected date.
 -- ===============================================================================================
 
-SET VARIABLE gtfs_date = '2026-06-07';
+SET VARIABLE gtfs_date = '2026-06-21';
 SET VARIABLE raw_dir = 'data/raw/source=gtfs/date=' || getvariable('gtfs_date') || '/stops.txt';
 
 

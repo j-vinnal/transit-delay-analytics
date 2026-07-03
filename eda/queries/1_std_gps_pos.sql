@@ -3,7 +3,7 @@
 -- Standardizes, parses, and loads raw GPS CSV files into a single table for a selected date.
 -- ===============================================================================================
 
-SET VARIABLE gps_date = '2026-06-07';
+SET VARIABLE gps_date = '2026-06-21';
 SET VARIABLE raw_dir = 'data/raw/source=gps/date=' || getvariable('gps_date') || '/*.csv';
 
 CREATE OR REPLACE TABLE standardized.gps_positions AS

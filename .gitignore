@@ -222,16 +222,12 @@ __marimo__/
 # data
 data/
 !data/.gitkeep
-
-
-
 !data/raw/source=gps/.gitkeep
 !data/raw/source=gtfs/.gitkeep
 
 !data/standardized/.gitkeep
 !data/intermediate/.gitkeep
 !data/curated/.gitkeep
-
 !data/analytics/.gitkeep
 
 
@@ -251,6 +247,7 @@ docs/
 .sqlfluff
 .settings/
 .sandbox/
-data/
+.dbeaver/
 
-
+# Query temporary files
+eda/queries/.tmp

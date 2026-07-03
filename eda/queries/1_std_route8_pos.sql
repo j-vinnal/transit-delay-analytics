@@ -23,5 +23,5 @@ WHERE
     gp.transport_type = 2
     AND gp.line_number = '8'
     AND lower(destination) = 'äigrumäe'
-    AND fleet_number = 35
+    --AND fleet_number = 35
    ;

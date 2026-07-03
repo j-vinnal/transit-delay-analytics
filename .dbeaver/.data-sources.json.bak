@@ -15,9 +15,26 @@
 				"properties": {
 					"file_search_path": "C:\\Projects\\stuff_25\\learn\\python\\projects\\rmk\\transit-delay-analytics"
 				}
-			},
-			"custom-properties": {
-				"resultset.maxrows": "2000"
+			}
+		},
+		"oracle_thin-19f045e2423-5b49794ae67fe282": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "XEPDB1",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "1521",
+				"database": "XEPDB1",
+				"url": "jdbc:oracle:thin:@//localhost:1521/XEPDB1",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native"
 			}
 		}
 	},

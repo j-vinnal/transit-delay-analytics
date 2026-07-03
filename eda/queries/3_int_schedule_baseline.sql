@@ -1,28 +1,68 @@
 -- =============================================================
--- intermediate/stop_distances
--- Business question answered: "How far was each route 8 bus from Zoo and Toompark at each moment?"
---
--- Comparison of spatial distance calculation methods
--- Dataset: bus route 8, vehicle fleet_number=35, Zoo stop (stop_id=822)
---
--- Three approaches:
---   A) PLANAR   — Euclidean / Pythagorean (flat surface)
---   B) SPHERE   — Haversine (perfect sphere, R = 6370986 m)
---   C) ELLIPSOID— geodesic on WGS84 ellipsoid (most accurate)
---
--- Two coordinate spaces:
---   EPSG:4326 (WGS84)  — native GPS, unit: degree
---   EPSG:3301 (L-EST97)— Estonian Lambert projection, unit: metre
---
--- Expected ordering at short distances in Estonia:
---   A1 ≈ C > B
---   A1 ≈ C because both use WGS84 ellipsoid constants; at short
---   distances the straight line (Pythagoras) ≈ geodesic arc.
---   B is lower because it uses a sphere (R=6370986 m) which
---   underestimates the meridional radius of curvature at ~59°N (~6399 km).
+-- intermediate/schedule_baseline
+-- Business question answered: "According to the official timetable, when should bus 8 depart Zoo and Toompark?"
+
 -- =============================================================
 
--- 1. Identify the key stops
+
+-- What routes exist?
+SELECT
+    route_id
+  , route_short_name
+  , route_long_name
+  , route_desc
+  , route_type
+  , route_url
+  , route_color
+  , route_text_color
+  , route_sort_order
+  , source
+  , snapshot_date
+FROM standardized.gtfs_routes
+WHERE 1 = 1
+	AND route_short_name = '8'; -- route_id = 'tallinna-lin_bus_8'
+
+
+SELECT
+    route_id
+  , service_id
+  , trip_id
+  , trip_headsign
+  , direction_id
+  , block_id
+  , shape_id
+  , wheelchair_accessible
+  , block_code
+  , vehicle_type
+  , thoreb_id
+  , trip_short_name
+  , source
+  , snapshot_date
+FROM standardized.gtfs_trips
+WHERE 1 = 1
+	AND route_id = 'tallinna-lin_bus_8'
+;
+
+	
+	
+	
+SELECT
+    service_id
+  , monday
+  , tuesday
+  , wednesday
+  , thursday
+  , friday
+  , saturday
+  , sunday
+  , start_date
+  , end_date
+  , source
+  , snapshot_date
+FROM standardized.gtfs_calendar	
+
+
+-- Identify the key stops
 SELECT
     stop_id
   , stop_name
@@ -31,6 +71,43 @@ SELECT
 FROM db.standardized.gtfs_stops
 WHERE lower(stop_name) = 'zoo' OR lower(stop_name) ILIKE 'toompark'
 ORDER BY stop_name;
+
+SELECT
+    trip_id
+  , arrival_time
+  , departure_time
+  , stop_id
+  , stop_sequence
+  , pickup_type
+  , drop_off_type
+  , source
+  , snapshot_date
+FROM standardized.gtfs_stops_times
+WHERE stop_id = 822; -- Zoo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 INSTALL spatial;
 LOAD spatial;
