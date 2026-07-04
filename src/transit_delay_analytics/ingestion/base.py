@@ -9,9 +9,12 @@ from typing import Any
 import requests
 
 from transit_delay_analytics.core.config import SourceConfig
-from transit_delay_analytics.constants import PROJECT_ROOT, RAW_DATA_DIR
-
-RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
+from transit_delay_analytics.constants import (
+    HIVE_DATE_PARTITION_KEY,
+    HIVE_SOURCE_PARTITION_KEY,
+    RAW_DATA_DIR,
+    relative_to_project,
+)
 
 
 class BaseIngestor(ABC):
@@ -42,23 +45,15 @@ class BaseIngestor(ABC):
     def get_save_dir(self) -> Path:
         """Returns the Hive-style partitioned directory for the current UTC date.
 
-        The `date=` partition is derived from UTC to avoid DST/timezone issues.
+        The `HIVE_DATE_PARTITION_KEY=` partition is derived from UTC to avoid DST/timezone issues.
         Does not create the directory (no side effects).
         """
         today = datetime.now(UTC).strftime("%Y-%m-%d")
         return (
-            PROJECT_ROOT
-            / "data"
-            / "raw"
-            / f"source={self.config.name}"
-            / f"date={today}"
+                RAW_DATA_DIR
+                / f"{HIVE_SOURCE_PARTITION_KEY}={self.config.name}"
+                / f"{HIVE_DATE_PARTITION_KEY}={today}"
         )
-
-    def fetch(self) -> bytes:
-        """Fetch raw data via HTTP GET using the configured timeout."""
-        response = requests.get(self.config.url, timeout=self.config.timeout_seconds)
-        response.raise_for_status()
-        return response.content
 
     def get_target_path(self) -> Path:
         """Determines the target path using a UTC timestamp filename."""
@@ -66,7 +61,14 @@ class BaseIngestor(ABC):
         filename = f"{self.config.name}_{timestamp}.{self.config.format}"
         return self.get_save_dir() / filename
 
-    def save(self, data: bytes, path: Path) -> Path:
+    def fetch(self) -> bytes:
+        """Fetch raw data via HTTP GET using the configured timeout."""
+        response = requests.get(self.config.url, timeout=self.config.timeout_seconds)
+        response.raise_for_status()
+        return response.content
+
+    @staticmethod
+    def save(data: bytes, path: Path) -> Path:
         """Write raw bytes to the given path, creating parent directories as needed.
 
         Subclasses may override if special handling is required.
@@ -84,7 +86,7 @@ class BaseIngestor(ABC):
                 "Ingestion skipped: File already exists",
                 extra={
                     "source": self.config.name,
-                    "path": str(target_path.relative_to(PROJECT_ROOT)),
+                    "path": str(relative_to_project(target_path)),
                 },
             )
             return
@@ -97,7 +99,10 @@ class BaseIngestor(ABC):
             size_mb = round(len(raw_data) / (1024 * 1024), 2)
             self.logger.info(
                 "Ingestion completed",
-                extra={"saved_to": str(saved_path), "size_mb": size_mb},
+                extra={
+                    "saved_to": str(relative_to_project(saved_path)),
+                    "size_mb": size_mb,
+                },
             )
         except Exception:
             self.logger.exception(

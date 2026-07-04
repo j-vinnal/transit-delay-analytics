@@ -1,5 +1,8 @@
 # Transit delay analytics
 
+**Status: Experimental / Work in Progress**
+This project is an ongoing architectural experiment. It is being used to test and evaluate different data processing strategies and is not a finalized or production-ready pipeline. Expect frequent breaking changes.
+
 Configuration-driven data pipeline and stochastic modelling framework for analyzing public transport delays using GTFS and near real-time vehicle GPS data.
 
 ## Getting Started

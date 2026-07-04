@@ -40,6 +40,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 # UTC time
 ENV TZ="UTC"
 
+ENV TRA_PROJECT_ROOT=/app
+
 # Reset the entrypoint, don't invoke `uv`
 ENTRYPOINT []
 

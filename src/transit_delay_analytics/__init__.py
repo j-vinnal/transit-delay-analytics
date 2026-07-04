@@ -1,5 +1,5 @@
 """Data pipeline framework."""
 
-from pathlib import Path
+from transit_delay_analytics.constants import PROJECT_ROOT
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+__all__ = ["PROJECT_ROOT"]

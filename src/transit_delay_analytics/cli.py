@@ -5,8 +5,8 @@ from datetime import date
 
 
 def parse_args(
-    valid_sources: list[str],
-    valid_models: list[str],
+        valid_sources: list[str],
+        valid_models: list[str],
 ) -> argparse.Namespace:
     """Parse command-line arguments with subparsers.
 

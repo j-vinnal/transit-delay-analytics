@@ -224,20 +224,14 @@ data/
 !data/.gitkeep
 !data/raw/source=gps/.gitkeep
 !data/raw/source=gtfs/.gitkeep
-
 !data/standardized/.gitkeep
 !data/intermediate/.gitkeep
 !data/curated/.gitkeep
 !data/analytics/.gitkeep
 
-
-
-
 # logs
 logs/
 !logs/.gitkeep
-
-
 .obsidian/
 .sandbox/
 .idea/
@@ -246,7 +240,6 @@ context.txt
 docs/
 .sqlfluff
 .settings/
-.sandbox/
 .dbeaver/
 .kilo/
 
