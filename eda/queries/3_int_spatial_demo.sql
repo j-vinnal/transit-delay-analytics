@@ -16,7 +16,7 @@
 --
 -- Expected ordering at short distances in Estonia:
 --   A1 ≈ C > B
---   A1 ≈ C because both use WGS84 ellipsoid constants; at short
+--   A1 ≈ C because both use WGS84 ellipsoid constants, at short
 --   distances the straight line (Pythagoras) ≈ geodesic arc.
 --   B is lower because it uses a sphere (R=6370986 m) which
 --   underestimates the meridional radius of curvature at ~59°N (~6399 km).
@@ -114,7 +114,7 @@ SELECT
     -- A3) PLANAR — L-EST97 (EPSG:3301), DuckDB built-in st_distance
     --
     -- Applies Pythagoras to projected metre coordinates.
-    -- Identical to A2; included to confirm st_distance behaviour on GEOMETRY type.
+    -- Identical to A2: included to confirm st_distance behaviour on GEOMETRY type.
     -- Ref: https://duckdb.org/docs/current/core_extensions/spatial/functions#st_distance
     -- =============================================================
   , st_distance(p.geom3301, s.stop_geom3301) AS eucl_3301_m
