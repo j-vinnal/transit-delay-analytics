@@ -8,10 +8,9 @@ from typing import Any
 
 import requests
 
-from transit_delay_analytics import PROJECT_ROOT
 from transit_delay_analytics.core.config import SourceConfig
+from transit_delay_analytics.constants import PROJECT_ROOT, RAW_DATA_DIR
 
-RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
 RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 

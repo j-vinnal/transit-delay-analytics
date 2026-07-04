@@ -248,6 +248,7 @@ docs/
 .settings/
 .sandbox/
 .dbeaver/
+.kilo/
 
 # Query temporary files
 eda/queries/.tmp
