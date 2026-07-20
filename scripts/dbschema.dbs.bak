@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="DuckDB" database="DuckDB" id="ebeaa3a3-5932-4d90-9480-3d34f8a99459" >
+	<schema name="standardized" >
+		<table name="gps_positions" spec="" >
+			<column name="transport_type" type="BIGINT" />
+			<column name="line_number" type="VARCHAR" />
+			<column name="vehicle_id" type="BIGINT" />
+			<column name="fleet_number" type="BIGINT" />
+			<column name="lat" type="DOUBLE" />
+			<column name="lon" type="DOUBLE" />
+			<column name="heading_deg" type="BIGINT" />
+			<column name="speed_kmh" type="VARCHAR" />
+			<column name="floor_type" type="VARCHAR" />
+			<column name="destination" type="VARCHAR" />
+			<column name="source" type="VARCHAR" length="100" todo="Blue" />
+			<column name="snapshot_ts" type="TIMESTAMP" todo="Blue" />
+			<column name="snapshot_date" type="DATE" todo="Blue" />
+		</table>
+		<table name="gtfs_calendar" spec="" >
+			<column name="service_id" type="BIGINT" />
+			<column name="monday" type="BIGINT" />
+			<column name="tuesday" type="BIGINT" />
+			<column name="wednesday" type="BIGINT" />
+			<column name="thursday" type="BIGINT" />
+			<column name="friday" type="BIGINT" />
+			<column name="saturday" type="BIGINT" />
+			<column name="sunday" type="BIGINT" />
+			<column name="start_date" type="BIGINT" />
+			<column name="end_date" type="BIGINT" />
+			<column name="source" type="VARCHAR" />
+			<column name="snapshot_date" type="DATE" />
+		</table>
+		<table name="gtfs_calendar_dates" spec="" >
+			<column name="service_id" type="BIGINT" />
+			<column name="date" type="DATE" />
+			<column name="exception_type" type="BIGINT" />
+			<column name="source" type="VARCHAR" />
+		</table>
+		<table name="gtfs_routes" spec="" >
+			<column name="route_id" type="VARCHAR" />
+			<column name="route_short_name" type="VARCHAR" />
+			<column name="route_long_name" type="VARCHAR" />
+			<column name="route_desc" type="VARCHAR" />
+			<column name="route_type" type="BIGINT" />
+			<column name="route_url" type="VARCHAR" />
+			<column name="route_color" type="VARCHAR" />
+			<column name="route_text_color" type="VARCHAR" />
+			<column name="route_sort_order" type="BIGINT" />
+			<column name="source" type="VARCHAR" />
+			<column name="snapshot_date" type="DATE" />
+		</table>
+		<table name="gtfs_stops" spec="" >
+			<column name="stop_id" type="BIGINT" />
+			<column name="stop_code" type="VARCHAR" />
+			<column name="stop_name" type="VARCHAR" />
+			<column name="stop_desc" type="VARCHAR" />
+			<column name="stop_lat" type="DOUBLE" />
+			<column name="stop_lon" type="DOUBLE" />
+			<column name="stop_url" type="VARCHAR" />
+			<column name="location_type" type="VARCHAR" />
+			<column name="parent_station" type="VARCHAR" />
+			<column name="thoreb_id" type="BIGINT" />
+			<column name="source" type="VARCHAR" />
+			<column name="snapshot_date" type="DATE" />
+		</table>
+		<table name="gtfs_stops_times" spec="" >
+			<column name="trip_id" type="BIGINT" />
+			<column name="arrival_time" type="VARCHAR" />
+			<column name="departure_time" type="VARCHAR" />
+			<column name="stop_id" type="BIGINT" />
+			<column name="stop_sequence" type="BIGINT" />
+			<column name="pickup_type" type="BIGINT" />
+			<column name="drop_off_type" type="BIGINT" />
+			<column name="source" type="VARCHAR" />
+			<column name="snapshot_date" type="DATE" />
+		</table>
+		<table name="gtfs_trips" spec="" >
+			<column name="route_id" type="VARCHAR" />
+			<column name="service_id" type="BIGINT" />
+			<column name="trip_id" type="BIGINT" />
+			<column name="trip_headsign" type="VARCHAR" />
+			<column name="direction_id" type="BIGINT" />
+			<column name="block_id" type="BIGINT" />
+			<column name="shape_id" type="VARCHAR" />
+			<column name="wheelchair_accessible" type="BIGINT" />
+			<column name="block_code" type="VARCHAR" />
+			<column name="vehicle_type" type="VARCHAR" />
+			<column name="thoreb_id" type="BIGINT" />
+			<column name="trip_short_name" type="VARCHAR" />
+			<column name="source" type="VARCHAR" />
+			<column name="snapshot_date" type="DATE" />
+		</table>
+		<table name="route8_positions" spec="" >
+			<column name="transport_type" type="BIGINT" />
+			<column name="line_number" type="VARCHAR" />
+			<column name="vehicle_id" type="BIGINT" />
+			<column name="fleet_number" type="BIGINT" />
+			<column name="lat" type="DOUBLE" />
+			<column name="lon" type="DOUBLE" />
+			<column name="heading_deg" type="BIGINT" />
+			<column name="speed_kmh" type="VARCHAR" />
+			<column name="floor_type" type="VARCHAR" />
+			<column name="destination" type="VARCHAR" />
+			<column name="source" type="VARCHAR" length="100" todo="Blue" />
+			<column name="snapshot_ts" type="TIMESTAMP" todo="Blue" />
+			<column name="snapshot_date" type="DATE" todo="Blue" />
+		</table>
+	</schema>
+	<diagram_group name="Default" id="996f98bc-88cd-468a-b2e4-091050e19b64" >
+		<diagram name="Diagram" id="7d0943bd-b38c-421a-b1ef-d7a361706b1f" show_column_type="y" show_schema_name="y" show_relation="columns" >
+			<entity schema="standardized" name="gps_positions" color="3986C1" x="190" y="133" />
+			<entity schema="standardized" name="gtfs_calendar" color="3986C1" x="266" y="608" />
+			<entity schema="standardized" name="gtfs_calendar_dates" color="3986C1" x="741" y="627" />
+			<entity schema="standardized" name="gtfs_routes" color="3986C1" x="494" y="608" />
+			<entity schema="standardized" name="gtfs_stops" color="3986C1" x="57" y="608" />
+			<entity schema="standardized" name="gtfs_stops_times" color="3986C1" x="1026" y="646" />
+			<entity schema="standardized" name="gtfs_trips" color="3986C1" x="1349" y="627" />
+			<entity schema="standardized" name="route8_positions" color="3986C1" x="456" y="133" />
+			<group name="GPS" color="FF8080" >
+				<comment><![CDATA[Filter `transport_type == 2` and `line_number == "8"`. Drop all other vehicles.]]></comment>
+				<entity schema="standardized" name="gps_positions" />
+				<entity schema="standardized" name="route8_positions" />
+				<callout x="475" y="95" pointer="SV" />
+			</group>
+			<group name="GTFS" color="99B3FF" >
+				<entity schema="standardized" name="gtfs_calendar" />
+				<entity schema="standardized" name="gtfs_calendar_dates" />
+				<entity schema="standardized" name="gtfs_routes" />
+				<entity schema="standardized" name="gtfs_stops" />
+				<entity schema="standardized" name="gtfs_stops_times" />
+				<entity schema="standardized" name="gtfs_trips" />
+			</group>
+		</diagram>
+	</diagram_group>
+</project>

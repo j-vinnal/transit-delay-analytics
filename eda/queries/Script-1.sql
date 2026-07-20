@@ -1,0 +1,1 @@
+SELECT sql FROM duckdb_tables()

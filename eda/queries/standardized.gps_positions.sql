@@ -3,8 +3,10 @@
 -- Standardizes, parses, and loads raw GPS CSV files into a single table for a selected date.
 -- ===============================================================================================
 
-SET VARIABLE gps_date = '2026-06-21';
-SET VARIABLE raw_dir = 'data/raw/source=gps/date=' || getvariable('gps_date') || '/*.csv';
+
+
+SET VARIABLE gps_date = '2026-07-20';
+SET VARIABLE raw_dir = 'data/raw/extract_source=gps/extract_date=' || getvariable('gps_date') || '/*.csv';
 
 CREATE OR REPLACE TABLE standardized.gps_positions AS
 	SELECT
@@ -21,12 +23,12 @@ CREATE OR REPLACE TABLE standardized.gps_positions AS
 	  , gp.speed_kmh
 	  , gp.floor_type
 	  , gp.destination
-	  , gp.source
 	  , try_strptime(
 	        regexp_extract(parse_filename(gp.filename), 'gps_(\d{8}_\d{6})\.csv', 1), '%Y%m%d_%H%M%S'
 	    ) AT TIME ZONE 'UTC' AS snapshot_ts
-	    --, filename AS file_path
-	  , getvariable('gps_date')::DATE AS snapshot_date
+	 --, filename AS file_path
+	 --, gp.extract_date
+	 --, gp.extract_source
 	FROM
 	    --data/raw/source=gps/date={gps_date}/*.csv
 	    read_csv(

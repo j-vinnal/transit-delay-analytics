@@ -6,13 +6,13 @@
 -- Dataset: bus route 8, vehicle fleet_number=35, Zoo stop (stop_id=822)
 --
 -- Three approaches:
---   A) PLANAR   — Euclidean / Pythagorean (flat surface)
---   B) SPHERE   — Haversine (perfect sphere, R = 6370986 m)
---   C) ELLIPSOID— geodesic on WGS84 ellipsoid (most accurate)
+--   A) PLANAR    — Euclidean / Pythagorean (flat surface)
+--   B) SPHERE    — Haversine (perfect sphere, R = 6370986 m)
+--   C) ELLIPSOID — geodesic on WGS84 ellipsoid (most accurate)
 --
 -- Two coordinate spaces:
---   EPSG:4326 (WGS84)  — native GPS, unit: degree
---   EPSG:3301 (L-EST97)— Estonian Lambert projection, unit: metre
+--   EPSG:4326 (WGS84)   — native GPS, unit: degree
+--   EPSG:3301 (L-EST97) — Estonian Lambert projection, unit: metre
 --
 -- Expected ordering at short distances in Estonia:
 --   A1 ≈ C > B
