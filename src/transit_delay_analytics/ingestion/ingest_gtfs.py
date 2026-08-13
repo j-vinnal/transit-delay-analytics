@@ -1,4 +1,5 @@
 """Ingestor implementation for GTFS Schedule data."""
+
 import zipfile
 from pathlib import Path
 from tempfile import TemporaryDirectory

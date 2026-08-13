@@ -43,7 +43,9 @@ class BaseIngestor(ABC):
         self.config = source_config
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    # ---------- Template Method: fixed workflow, subclasses should not override ----------
+    # ---------------------------------------------------------------------------
+    # Template Method: fixed workflow, subclasses should not override
+    # ---------------------------------------------------------------------------
     def run(self) -> None:
         """Orchestrate the ingestion process with idempotency check."""
         target_path = self.get_target_path()
@@ -78,7 +80,9 @@ class BaseIngestor(ABC):
             )
             raise
 
-    # ---------- Workflow steps with sensible defaults, override when needed ----------
+    # ---------------------------------------------------------------------------
+    # Workflow steps, override when needed
+    # ---------------------------------------------------------------------------
     def get_target_path(self) -> Path:
         """Determines the target path using a Hive-style partitioned directory and UTC timestamp filename."""
         now = datetime.now(UTC)
