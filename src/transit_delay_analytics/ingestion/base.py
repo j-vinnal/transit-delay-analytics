@@ -24,15 +24,17 @@ class BaseIngestor(ABC):
     _registry: dict[str, type["BaseIngestor"]] = {}
 
     def __init_subclass__(cls, source_name: str, **kwargs: Any) -> None:
-        """Automatically registers subclasses when they are defined."""
+        """Registers subclasses when they are defined."""
         super().__init_subclass__(**kwargs)
+        if source_name in cls._registry:
+            raise ValueError(f"Source is already registered: {source_name!r}")
         cls._registry[source_name] = cls
 
     @classmethod
     def get_ingestor(cls, source_config: SourceConfig) -> "BaseIngestor":
         """Factory method to get the correct ingestor instance."""
         ingestor_class = cls._registry.get(source_config.name)
-        if not ingestor_class:
+        if ingestor_class is None:
             raise ValueError(
                 f"No ingestor registered for source: '{source_config.name}'"
             )
@@ -42,41 +44,7 @@ class BaseIngestor(ABC):
         self.config = source_config
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def get_save_dir(self) -> Path:
-        """Returns the Hive-style partitioned directory for the current UTC date.
-
-        The `HIVE_DATE_PARTITION_KEY=` partition is derived from UTC to avoid DST/timezone issues.
-        Does not create the directory (no side effects).
-        """
-        today = datetime.now(UTC).strftime("%Y-%m-%d")
-        return (
-                RAW_DATA_DIR
-                / f"{HIVE_SOURCE_PARTITION_KEY}={self.config.name}"
-                / f"{HIVE_DATE_PARTITION_KEY}={today}"
-        )
-
-    def get_target_path(self) -> Path:
-        """Determines the target path using a UTC timestamp filename."""
-        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
-        filename = f"{self.config.name}_{timestamp}.{self.config.format}"
-        return self.get_save_dir() / filename
-
-    def fetch(self) -> bytes:
-        """Fetch raw data via HTTP GET using the configured timeout."""
-        response = requests.get(self.config.url, timeout=self.config.timeout_seconds)
-        response.raise_for_status()
-        return response.content
-
-    @staticmethod
-    def save(data: bytes, path: Path) -> Path:
-        """Write raw bytes to the given path, creating parent directories as needed.
-
-        Subclasses may override if special handling is required.
-        """
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(data)
-        return path
-
+    # ---------- Template Method: fixed workflow, subclasses should not override ----------
     def run(self) -> None:
         """Orchestrate the ingestion process with idempotency check."""
         target_path = self.get_target_path()
@@ -95,8 +63,9 @@ class BaseIngestor(ABC):
         try:
             raw_data = self.fetch()
             saved_path = self.save(raw_data, target_path)
-
             size_mb = round(len(raw_data) / (1024 * 1024), 2)
+            self.post_process(saved_path)
+
             self.logger.info(
                 "Ingestion completed",
                 extra={
@@ -109,3 +78,39 @@ class BaseIngestor(ABC):
                 "Ingestion failed", extra={"source": self.config.name}
             )
             raise
+
+    # ---------- Workflow steps with sensible defaults, override when needed ----------
+    def get_target_path(self) -> Path:
+        """Determines the target path using a Hive-style partitioned directory and UTC timestamp filename."""
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
+        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
+        filename = f"{self.config.name}_{timestamp}.{self.config.format}"
+
+        return (
+                RAW_DATA_DIR
+                / f"{HIVE_SOURCE_PARTITION_KEY}={self.config.name}"
+                / f"{HIVE_DATE_PARTITION_KEY}={today}"
+                / filename
+        )
+
+    def fetch(self) -> bytes:
+        """Fetch raw data via HTTP GET using the configured timeout."""
+        response = requests.get(self.config.url, timeout=self.config.timeout_seconds)
+        response.raise_for_status()
+        return response.content
+
+    @staticmethod
+    def save(data: bytes, path: Path) -> Path:
+        """Write raw bytes to the given path, creating parent directories."""
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+        return path
+
+    def post_process(self, path: Path) -> None:
+        """Post-process the saved artifact.
+
+        This hook is intentionally a no-op by default. It provides an
+        extension point without requiring subclasses such as GPSIngestor
+        to implement behavior they do not need.
+        """
+        pass
