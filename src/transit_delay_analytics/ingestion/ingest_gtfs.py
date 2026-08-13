@@ -1,6 +1,7 @@
 """Ingestor implementation for GTFS Schedule data."""
 import zipfile
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from transit_delay_analytics.constants import relative_to_project
 from transit_delay_analytics.ingestion.base import BaseIngestor
@@ -33,8 +34,13 @@ class GTFSIngestor(BaseIngestor, source_name="gtfs"):
             )
             return
 
-        with zipfile.ZipFile(path) as zf:
-            zf.extractall(extract_dir)
+        with TemporaryDirectory(dir=path.parent) as temp_dir:
+            temp_path = Path(temp_dir)
+
+            with zipfile.ZipFile(path) as zip_file:
+                zip_file.extractall(temp_path)
+
+            temp_path.rename(extract_dir)
 
         self.logger.info(
             "Extraction completed",

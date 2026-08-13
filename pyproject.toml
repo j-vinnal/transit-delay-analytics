@@ -33,6 +33,7 @@ dev = [
     "plotly>=6.8.0",
     "pyarrow>=24.0.0",
     "pylint>=4.0.5",
+    "pytest>=9.1.1",
     "pytz>=2026.2",
     "ruff>=0.15.13",
     "sqlfluff>=4.2.1",

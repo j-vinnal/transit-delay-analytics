@@ -18,9 +18,8 @@ from transit_delay_analytics.constants import (
 
 
 class BaseIngestor(ABC):
-    """Abstract base class defining the interface for all data ingestors."""
+    """Base implementation for data ingestion workflows."""
 
-    # All created subclasses are collected here
     _registry: dict[str, type["BaseIngestor"]] = {}
 
     def __init_subclass__(cls, source_name: str, **kwargs: Any) -> None:
@@ -82,8 +81,9 @@ class BaseIngestor(ABC):
     # ---------- Workflow steps with sensible defaults, override when needed ----------
     def get_target_path(self) -> Path:
         """Determines the target path using a Hive-style partitioned directory and UTC timestamp filename."""
-        today = datetime.now(UTC).strftime("%Y-%m-%d")
-        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
+        now = datetime.now(UTC)
+        today = now.strftime("%Y-%m-%d")
+        timestamp = now.strftime("%Y%m%d_%H%M%S")
         filename = f"{self.config.name}_{timestamp}.{self.config.format}"
 
         return (
@@ -107,10 +107,5 @@ class BaseIngestor(ABC):
         return path
 
     def post_process(self, path: Path) -> None:
-        """Post-process the saved artifact.
-
-        This hook is intentionally a no-op by default. It provides an
-        extension point without requiring subclasses such as GPSIngestor
-        to implement behavior they do not need.
-        """
+        """Post-process the saved artifact. No-op by default."""
         pass
