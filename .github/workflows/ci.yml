@@ -19,29 +19,17 @@ jobs:
         with:
           version: "0.6.15"
 
-      - name: Platform info
-        run: |
-          uname -a
-          ldd --version
-          uv --version
+      - name: Install Python 3.12
+        run: uv python install 3.12
 
-      - name: Sync dependencies (no lock)
-        run: uv sync --no-dev
+      - name: Sync dependencies
+        run: uv sync --python 3.12 --locked
 
-      - name: Test core imports
-        run: |
-          uv run python -c "import sys; print(sys.version)"
-          uv run python -c "import polars; print('polars OK')"
-          uv run python -c "import duckdb; print('duckdb OK')"
-          uv run python -c "import numpy; print('numpy OK')"
+      - name: Run tests
+        run: uv run --python 3.12 pytest tests/ -v
 
-      - name: Sync with dev dependencies
-        run: uv sync
-
-      - name: Run tests with faulthandler
-        env:
-          PYTHONFAULTHANDLER: 1
-        run: uv run python -X faulthandler -m pytest tests/ -v --tb=long -x
+      - name: Run lint
+        run: uv run --python 3.12 ruff check src/ tests/
 
   build:
     needs: test
