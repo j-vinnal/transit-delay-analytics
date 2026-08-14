@@ -1,7 +1,9 @@
 """Tests for the ingestion base module."""
 
 from pathlib import Path
+
 import pytest
+
 from transit_delay_analytics.ingestion.base import BaseIngestor
 
 

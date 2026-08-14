@@ -1,7 +1,9 @@
 """Shared pytest fixtures for the ingestion test suite."""
 
 from typing import Any
+
 import pytest
+
 from transit_delay_analytics.core.config import SourceConfig
 
 

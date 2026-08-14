@@ -184,7 +184,8 @@ def main() -> int:
 
     valid_sources = list(sources_config.keys())
     # standardized import above registers all transformers in BaseTransformer._registry
-    # TODO: Peaks kontrollima neid vastavalt argumendile, ingest puhul etc seda vaja pole, ehk kontroll on vales kohas.
+    # TODO: Peaks kontrollima neid vastavalt argumendile,
+    # ingest puhul etc seda vaja pole, ehk kontroll on vales kohas.
     valid_models = list(BaseTransformer._registry.keys())
 
     args = parse_args(valid_sources=valid_sources, valid_models=valid_models)

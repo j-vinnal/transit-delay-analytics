@@ -8,13 +8,13 @@ from typing import Any
 
 import requests
 
-from transit_delay_analytics.core.config import SourceConfig
 from transit_delay_analytics.constants import (
     HIVE_DATE_PARTITION_KEY,
     HIVE_SOURCE_PARTITION_KEY,
     RAW_DATA_DIR,
     relative_to_project,
 )
+from transit_delay_analytics.core.config import SourceConfig
 
 
 class BaseIngestor(ABC):
@@ -84,7 +84,9 @@ class BaseIngestor(ABC):
     # Workflow steps, override when needed
     # ---------------------------------------------------------------------------
     def get_target_path(self) -> Path:
-        """Determines the target path using a Hive-style partitioned directory and UTC timestamp filename."""
+        """Determines the target path using a Hive-style partitioned directory
+        and UTC timestamp filename.
+        """
         now = datetime.now(UTC)
         today = now.strftime("%Y-%m-%d")
         timestamp = now.strftime("%Y%m%d_%H%M%S")
