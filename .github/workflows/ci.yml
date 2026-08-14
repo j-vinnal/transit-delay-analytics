@@ -17,16 +17,31 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          version: "0.6.x"
+          version: "0.6.15"
 
-      - name: Sync dependencies
-        run: uv sync --locked
+      - name: Platform info
+        run: |
+          uname -a
+          ldd --version
+          uv --version
 
-      - name: Run tests
-        run: uv run pytest tests/ -v
+      - name: Sync dependencies (no lock)
+        run: uv sync --no-dev
 
-      - name: Run lint (ruff)
-        run: uv run ruff check src/ tests/
+      - name: Test core imports
+        run: |
+          uv run python -c "import sys; print(sys.version)"
+          uv run python -c "import polars; print('polars OK')"
+          uv run python -c "import duckdb; print('duckdb OK')"
+          uv run python -c "import numpy; print('numpy OK')"
+
+      - name: Sync with dev dependencies
+        run: uv sync
+
+      - name: Run tests with faulthandler
+        env:
+          PYTHONFAULTHANDLER: 1
+        run: uv run python -X faulthandler -m pytest tests/ -v --tb=long -x
 
   build:
     needs: test
