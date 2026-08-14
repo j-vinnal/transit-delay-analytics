@@ -1,0 +1,102 @@
+# VCS and CI metadata
+.git
+.github
+.gitignore
+
+# Python environment and caches
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+ENV/
+*.py[cod]
+*.so
+
+# Editor and OS metadata
+.vscode/
+.idea/
+.obsidian/
+.DS_Store
+Thumbs.db
+
+# VCS and project metadata
+.git
+.github
+.gitignore
+
+# Python runtime and caches
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+ENV/
+*.py[cod]
+*.so
+
+# Editor and OS metadata
+.vscode/
+.idea/
+.dbeaver/
+.sandbox/
+.obsidian/
+.kilo/
+.settings/
+.DS_Store
+Thumbs.db
+
+# Generated project data
+logs/**
+output/**
+data/**
+*.db
+*.sqlite3
+*.duckdb
+*.log
+
+# Build and test artifacts
+build/
+dist/
+*.egg-info/
+.coverage
+.coverage.*
+htmlcov/
+
+# Required project files for Docker build
+!pyproject.toml
+!uv.lock
+!README.md
+!src/
+!config/
+!Dockerfile
+!docker-compose.yaml
+!LICENSE
+!tests/
+
+# Preserve placeholder files required for runtime folder structure
+!data/.gitkeep
+!data/raw/
+!data/raw/.gitkeep
+!data/raw/extract_source=gps/
+!data/raw/extract_source=gps/.gitkeep
+!data/raw/extract_source=gtfs/
+!data/raw/extract_source=gtfs/.gitkeep
+!data/intermediate/
+!data/intermediate/.gitkeep
+!data/standardized/
+!data/standardized/.gitkeep
+!data/curated/
+!data/curated/.gitkeep
+!data/analytics/
+!data/analytics/.gitkeep
+!logs/.gitkeep
+!output/.gitkeep
+
+
+docs/
+
