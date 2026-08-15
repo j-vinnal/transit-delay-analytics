@@ -28,6 +28,7 @@ def test_duplicate_source_name_raises():
         pass
 
     with pytest.raises(ValueError, match="already registered"):
+
         class SecondIngestor(BaseIngestor, source_name="dup"):
             pass
 

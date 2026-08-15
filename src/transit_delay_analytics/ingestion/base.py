@@ -22,6 +22,10 @@ class BaseIngestor(ABC):
 
     _registry: dict[str, type["BaseIngestor"]] = {}
 
+    def __init__(self, source_config: SourceConfig) -> None:
+        self.config = source_config
+        self.logger = logging.getLogger(self.__class__.__name__)
+
     def __init_subclass__(cls, source_name: str, **kwargs: Any) -> None:
         """Registers subclasses when they are defined."""
         super().__init_subclass__(**kwargs)
@@ -38,10 +42,6 @@ class BaseIngestor(ABC):
                 f"No ingestor registered for source: '{source_config.name}'"
             )
         return ingestor_class(source_config)
-
-    def __init__(self, source_config: SourceConfig) -> None:
-        self.config = source_config
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     # ---------------------------------------------------------------------------
     # Template Method: fixed workflow, subclasses should not override
@@ -93,10 +93,10 @@ class BaseIngestor(ABC):
         filename = f"{self.config.name}_{timestamp}.{self.config.format}"
 
         return (
-                RAW_DATA_DIR
-                / f"{HIVE_SOURCE_PARTITION_KEY}={self.config.name}"
-                / f"{HIVE_DATE_PARTITION_KEY}={today}"
-                / filename
+            RAW_DATA_DIR
+            / f"{HIVE_SOURCE_PARTITION_KEY}={self.config.name}"
+            / f"{HIVE_DATE_PARTITION_KEY}={today}"
+            / filename
         )
 
     def fetch(self) -> bytes:
