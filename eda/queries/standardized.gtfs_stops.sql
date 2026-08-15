@@ -5,9 +5,8 @@
 -- Standardizes, parses, and loads raw GTFS CSV files into a single table for a selected date.
 -- ===============================================================================================
 
-SET VARIABLE gtfs_date = '2026-06-21';
-SET VARIABLE raw_dir = 'data/raw/source=gtfs/date=' || getvariable('gtfs_date') || '/stops.txt';
-
+SET VARIABLE gtfs_date = '2026-08-15';
+SET VARIABLE raw_dir = 'data/raw/extract_source=gtfs/extract_date=' || getvariable('gtfs_date') || '/extract_ts=*/stops.txt';
 
 CREATE OR REPLACE TABLE standardized.gtfs_stops AS
 SELECT
@@ -21,6 +20,7 @@ SELECT
   , location_type
   , parent_station
   , thoreb_id
-  , source
-  , date AS snapshot_date
-FROM read_csv(getvariable('raw_dir'));
+  , try_strptime(extract_ts, '%Y%m%d_%H%M%S') AT TIME ZONE 'UTC' AS extract_ts
+  , current_timestamp AS loaded_ts
+FROM --data/raw/extract_source=gtfs/extract_date={gtfs_date}/extract_ts=*/stops.txt
+    read_csv(getvariable('raw_dir'));

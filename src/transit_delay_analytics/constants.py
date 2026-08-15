@@ -34,6 +34,7 @@ RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
 # Hive-style partition keys
 HIVE_SOURCE_PARTITION_KEY = "extract_source"
 HIVE_DATE_PARTITION_KEY = "extract_date"
+HIVE_TIMESTAMP_PARTITION_KEY = "extract_ts"
 
 # ==========================================
 # MODULE 2: DATA PIPELINE
