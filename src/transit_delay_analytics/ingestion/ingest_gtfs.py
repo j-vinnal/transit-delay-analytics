@@ -4,7 +4,10 @@ import zipfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from transit_delay_analytics.constants import HIVE_TIMESTAMP_PARTITION_KEY, relative_to_project
+from transit_delay_analytics.constants import (
+    HIVE_TIMESTAMP_PARTITION_KEY,
+    relative_to_project,
+)
 from transit_delay_analytics.ingestion.base import BaseIngestor
 
 
@@ -12,7 +15,7 @@ class GTFSIngestor(BaseIngestor, source_name="gtfs"):
     """Ingestor for fetching daily GTFS zip archives."""
 
     def post_process(self, path: Path) -> None:
-        """Extract the GTFS archive into a run-specific, hive-style partitioned directory.
+        """Extract the GTFS archive into a run-specific, hive-style directory.
 
         Example:
             gtfs_20260815_144654.zip
