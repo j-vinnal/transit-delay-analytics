@@ -22,8 +22,8 @@
 --   underestimates the meridional radius of curvature at ~59°N (~6399 km).
 -- =============================================================
 
---INSTALL spatial;
---LOAD spatial;
+INSTALL spatial;
+LOAD spatial;
 
 --SUMMARIZE
 WITH
