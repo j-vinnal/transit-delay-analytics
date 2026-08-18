@@ -4,7 +4,7 @@
 url = "https://transport.tallinn.ee/readfile.php?name=gps.txt"
 format = "csv"
 description = "Real-time vehicle positions, updated every 30 seconds"
-interval_seconds = 30
+interval_seconds = 15
 timeout_seconds = 10
 window_start = "07:00"
 window_end = "10:00"

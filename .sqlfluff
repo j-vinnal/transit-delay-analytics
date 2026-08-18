@@ -83,14 +83,14 @@ wildcard_policy = single
 ; LAYOUT: OPERATORS (Newline after operator)
 ; =============================================================================
 [sqlfluff:layout.operators]
-operator_new_lines = after
+operator_new_lines = before
 
 ; =============================================================================
 ; LAYOUT: KEYWORD NEWLINES (Deprecated in newer sqlfluff?)
 ; =============================================================================
-[sqlfluff:layout.keyword_newline]
-line_position = alone:strict
-keyword_line_position = leading:strict
+#[sqlfluff:layout.keyword_newline]
+#line_position = alone:strict
+#keyword_line_position = leading:strict
 
 ; =============================================================================
 ; CAPITALISATION
